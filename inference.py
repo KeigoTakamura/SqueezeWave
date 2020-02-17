@@ -37,20 +37,22 @@ from denoiser import Denoiser
 def main(mel_files, squeezewave_path, sigma, output_dir, sampling_rate, is_fp16,
          denoiser_strength):
     mel_files = files_to_list(mel_files)
-    squeezewave = torch.load(squeezewave_path)['model']
+    squeezewave = torch.load(squeezewave_path,map_location='cpu')['model']
     squeezewave = squeezewave.remove_weightnorm(squeezewave)
-    squeezewave.cuda().eval()
+    #squeezewave.cuda().eval()
+    squeezewave.eval()
     if is_fp16:
         from apex import amp
         squeezewave, _ = amp.initialize(squeezewave, [], opt_level="O3")
 
     if denoiser_strength > 0:
-        denoiser = Denoiser(squeezewave).cuda()
+        denoiser = Denoiser(squeezewave)
+        #todo cuda fix to CPU
 
     for i, file_path in enumerate(mel_files):
         file_name = os.path.splitext(os.path.basename(file_path))[0]
-        mel = torch.load(file_path)
-        mel = torch.autograd.Variable(mel.cuda())
+        mel = torch.load(file_path,map_location='cpu')
+        mel = torch.autograd.Variable(mel)
         mel = torch.unsqueeze(mel, 0)
         mel = mel.half() if is_fp16 else mel
         with torch.no_grad():

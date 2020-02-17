@@ -250,7 +250,7 @@ class SqueezeWave(torch.nn.Module):
                                           self.n_remaining_channels,
                                           l).normal_()
         else:
-            audio = torch.cuda.FloatTensor(spect.size(0),
+            audio = torch.FloatTensor(spect.size(0),
                                            self.n_remaining_channels,
                                            l).normal_()
 
@@ -271,7 +271,7 @@ class SqueezeWave(torch.nn.Module):
                 if spect.type() == 'torch.cuda.HalfTensor':
                     z = torch.cuda.HalfTensor(spect.size(0), self.n_early_size, l).normal_()
                 else:
-                    z = torch.cuda.FloatTensor(spect.size(0), self.n_early_size, l).normal_()
+                    z = torch.FloatTensor(spect.size(0), self.n_early_size, l).normal_()
                 audio = torch.cat((sigma*z, audio),1)
 
         audio = audio.permute(0,2,1).contiguous().view(audio.size(0), -1).data

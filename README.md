@@ -1,3 +1,11 @@
+##About CPU version
+
+Making changes to interface .py and glow.py
+
+
+todo
+・ Speech is not generated well
+
 ## SqueezeWave: Extremely Lightweight Vocoders for On-device Speech Synthesis
 By Bohan Zhai *, Tianren Gao *, Flora Xue, Daniel Rothchild, Bichen Wu, Joseph Gonzalez, and Kurt Keutzer (UC Berkeley)
 
