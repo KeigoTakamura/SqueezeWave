@@ -103,10 +103,9 @@ class Invertible1x1Conv(torch.nn.Module):
                 # Reverse computation
                 W_inverse = W.float().inverse()
                 W_inverse = Variable(W_inverse[..., None])
-                #if z.type() == 'torch.HalfTensor':
-                #    W_inverse = W_inverse.half()
-                self.W_inverse = W_inverse.half()
-            self.W_inverse = self.W_inverse.to(torch.float32)
+                if z.type() == 'torch.cuda.HalfTensor':
+                    W_inverse = W_inverse.half()
+                self.W_inverse = W_inverse
             z = F.conv1d(z, self.W_inverse, bias=None, stride=1, padding=0)
             return z
         else:
@@ -149,8 +148,8 @@ class WN(torch.nn.Module):
             # depthwise separable convolution
             depthwise = torch.nn.Conv1d(n_channels, n_channels, 3,
                 dilation=dilation, padding=padding,
-                groups=n_channels)
-            pointwise = torch.nn.Conv1d(n_channels, 2*n_channels, 1)
+                groups=n_channels).cuda()
+            pointwise = torch.nn.Conv1d(n_channels, 2*n_channels, 1).cuda()
             bn = torch.nn.BatchNorm1d(n_channels) 
             self.in_layers.append(torch.nn.Sequential(bn, depthwise, pointwise))
             # res_skip_layer
@@ -163,7 +162,6 @@ class WN(torch.nn.Module):
         audio = self.start(audio)
         n_channels_tensor = torch.IntTensor([self.n_channels])
         # pass all the mel_spectrograms to cond_layer
-        #spect = spect.to(torch.float32)
         spect = self.cond_layer(spect)
         for i in range(self.n_layers):
             # split the corresponding mel_spectrogram

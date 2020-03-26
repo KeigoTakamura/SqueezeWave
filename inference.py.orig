@@ -67,9 +67,6 @@ def main(mel_files, squeezewave_path, sigma, output_dir, sampling_rate, is_fp16,
             output_dir, "{}_synthesis.wav".format(file_name))
         write(audio_path, sampling_rate, audio)
         print(audio_path)
-    end = time.time()
-    print("Squeezewave vocoder time")
-    print(end-start)
 
 
 if __name__ == "__main__":
