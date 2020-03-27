@@ -4,7 +4,7 @@ Making changes to interface .py and glow.py
 
 # Acknowledgments
 https://github.com/KeigoTakamura/SqueezeWave-for-CPU-forkd-/issues/1
-
+This repository is now complete with these patches, for which I would like to express my deepest gratitude
 
 #  todo
 ・ Speech is not generated well
