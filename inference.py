@@ -28,6 +28,7 @@
 #
 # *****************************************************************************
 import os
+import time
 from scipy.io.wavfile import write
 import torch
 from mel2samp import files_to_list, MAX_WAV_VALUE
@@ -36,6 +37,7 @@ from denoiser import Denoiser
 
 def main(mel_files, squeezewave_path, sigma, output_dir, sampling_rate, is_fp16,
          denoiser_strength):
+    start = time.time()
     mel_files = files_to_list(mel_files)
     squeezewave = torch.load(squeezewave_path,map_location='cpu')['model']
     squeezewave = squeezewave.remove_weightnorm(squeezewave)
